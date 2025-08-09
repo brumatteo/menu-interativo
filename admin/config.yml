@@ -1,0 +1,242 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Linguagem padrão PT-BR
+locale: 'pt'
+
+# Diretórios de mídia
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  # Tema geral do site
+  - name: theme
+    label: "Tema"
+    delete: false
+    files:
+      - file: "content/theme.json"
+        name: theme
+        label: "Configurações do Tema"
+        format: json
+        fields:
+          - { label: "Texto da Marca", name: brandText, widget: string }
+          - { label: "Cor Primária", name: primary, widget: color }
+          - { label: "Cor Secundária", name: secondary, widget: color }
+          - { label: "Cor de Fundo", name: bg, widget: color }
+          - { label: "Cor dos Cards", name: card, widget: color }
+          - { label: "Cor do Texto", name: text, widget: color }
+          - label: "CTA do Cabeçalho"
+            name: headerCta
+            widget: object
+            fields:
+              - { label: "Rótulo", name: label, widget: string }
+              - { label: "Link", name: href, widget: string }
+          - label: "Ordem das Seções"
+            name: sectionsOrder
+            widget: list
+            field:
+              widget: select
+              options:
+                - { label: "Hero", value: hero }
+                - { label: "Sobre", value: about }
+                - { label: "Cardápio", value: menu }
+                - { label: "Decorações", value: decorations }
+                - { label: "Galeria", value: gallery }
+                - { label: "Sob medida", value: custom }
+                - { label: "Informações/Políticas", value: policies }
+                - { label: "FAQ", value: faq }
+          - label: "Seções Ativas"
+            name: sectionsEnabled
+            widget: object
+            fields:
+              - { label: "Hero", name: hero, widget: boolean, default: true }
+              - { label: "Sobre", name: about, widget: boolean, default: true }
+              - { label: "Cardápio", name: menu, widget: boolean, default: true }
+              - { label: "Decorações", name: decorations, widget: boolean, default: true }
+              - { label: "Galeria", name: gallery, widget: boolean, default: true }
+              - { label: "Sob medida", name: custom, widget: boolean, default: true }
+              - { label: "Informações/Políticas", name: policies, widget: boolean, default: true }
+              - { label: "FAQ", name: faq, widget: boolean, default: true }
+
+  # Seção Hero
+  - name: hero
+    label: "Hero"
+    delete: false
+    files:
+      - file: "content/hero.json"
+        name: hero
+        label: "Seção Hero"
+        format: json
+        fields:
+          - { label: "Título", name: title, widget: string }
+          - { label: "Subtítulo", name: subtitle, widget: text }
+          - { label: "Imagem", name: image, widget: image, required: false }
+          - { label: "Overlay CSS", name: overlay, widget: string, required: false }
+          - { label: "Opacidade", name: opacity, widget: number, value_type: float, min: 0, max: 1, step: 0.05, default: 0.8 }
+          - label: "CTA"
+            name: cta
+            widget: object
+            fields:
+              - { label: "Rótulo", name: label, widget: string }
+              - { label: "Link", name: href, widget: string }
+
+  # Seção Sobre
+  - name: about
+    label: "Sobre"
+    delete: false
+    files:
+      - file: "content/about.json"
+        name: about
+        label: "Seção Sobre"
+        format: json
+        fields:
+          - { label: "Título", name: title, widget: string }
+          - { label: "Texto", name: text, widget: text }
+          - { label: "Imagem", name: image, widget: image, required: false }
+          - label: "Características"
+            name: features
+            widget: list
+            allow_add: true
+            fields:
+              - { label: "Ícone", name: icon, widget: image, required: false }
+              - { label: "Título", name: title, widget: string }
+              - { label: "Texto", name: text, widget: text }
+
+  # Categorias
+  - name: categories
+    label: "Categorias"
+    delete: false
+    files:
+      - file: "content/categories.json"
+        name: categories
+        label: "Categorias de Produtos"
+        format: json
+        fields:
+          - { label: "Categorias", name: items, widget: list, allow_add: true, field: { label: "Categoria", name: categoria, widget: string } }
+
+  # Produtos
+  - name: products
+    label: "Produtos"
+    delete: false
+    files:
+      - file: "content/products.json"
+        name: products
+        label: "Produtos"
+        format: json
+        fields:
+          - label: "Itens"
+            name: items
+            widget: list
+            allow_add: true
+            fields:
+              - { label: "Ativo", name: active, widget: boolean, default: true }
+              - { label: "Nome", name: name, widget: string }
+              - { label: "Preço", name: price, widget: string }
+              - { label: "Descrição", name: description, widget: text }
+              - { label: "Categoria", name: category, widget: select, options: "{{categories.items}}" }
+              - { label: "Descrição da categoria", name: categoryDescription, widget: string, required: false }
+              - label: "Tamanhos e preços"
+                name: sizeTable
+                widget: list
+                allow_add: true
+                fields:
+                  - { label: "Tamanho", name: size, widget: string }
+                  - { label: "Porções", name: serves, widget: string }
+                  - { label: "Preço", name: price, widget: string }
+              - { label: "Tags", name: tags, widget: list, allow_add: true, field: { label: "Tag", name: tag, widget: string }, required: false }
+              - { label: "Rende (porção)", name: serves, widget: string }
+              - { label: "Imagem", name: image, widget: image, required: false }
+              - { label: "Mais Vendido", name: bestseller, widget: boolean, required: false }
+              - { label: "Novo", name: new, widget: boolean, required: false }
+              - label: "CTA"
+                name: cta
+                widget: object
+                fields:
+                  - { label: "Rótulo", name: label, widget: string }
+                  - { label: "Link", name: href, widget: string }
+
+  # Galeria
+  - name: gallery
+    label: "Galeria"
+    delete: false
+    files:
+      - file: "content/gallery.json"
+        name: gallery
+        label: "Galeria"
+        format: json
+        fields:
+          - { label: "Imagens", name: items, widget: list, allow_add: true, field: { label: "Imagem", name: image, widget: image } }
+
+  # Decorações
+  - name: decorations
+    label: "Decorações"
+    delete: false
+    files:
+      - file: "content/decorations.json"
+        name: decorations
+        label: "Decorações"
+        format: json
+        fields:
+          - { label: "Título", name: title, widget: string }
+          - { label: "Subtítulo", name: subtitle, widget: text }
+          - label: "Imagens"
+            name: items
+            widget: list
+            allow_add: true
+            field: { label: "Imagem", name: image, widget: image }
+
+  # Sob medida (custom)
+  - name: custom
+    label: "Sob medida"
+    delete: false
+    files:
+      - file: "content/custom.json"
+        name: custom
+        label: "Especial sob medida"
+        format: json
+        fields:
+          - { label: "Título", name: title, widget: string }
+          - { label: "Texto", name: text, widget: text }
+          - label: "CTA"
+            name: cta
+            widget: object
+            fields:
+              - { label: "Rótulo", name: label, widget: string }
+              - { label: "Link", name: href, widget: string }
+
+  # Informações/Políticas
+  - name: policies
+    label: "Informações & Políticas"
+    delete: false
+    files:
+      - file: "content/policies.json"
+        name: policies
+        label: "Informações e Políticas"
+        format: json
+        fields:
+          - label: "Blocos"
+            name: items
+            widget: list
+            allow_add: true
+            fields:
+              - { label: "Título", name: title, widget: string }
+              - { label: "Itens", name: items, widget: list, allow_add: true, field: { label: "Item", name: item, widget: string } }
+
+  # FAQ
+  - name: faq
+    label: "FAQ"
+    delete: false
+    files:
+      - file: "content/faq.json"
+        name: faq
+        label: "Perguntas Frequentes"
+        format: json
+        fields:
+          - label: "Perguntas"
+            name: items
+            widget: list
+            allow_add: true
+            fields:
+              - { label: "Pergunta", name: q, widget: string }
+              - { label: "Resposta", name: a, widget: text }
