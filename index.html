@@ -35,14 +35,18 @@
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
   if (window.netlifyIdentity) {
+    // Só abre o popup se a URL tiver token do e-mail (convite/recuperação)
     const hasToken = /token=|confirmation_token=|recovery_token=|invite_token=/.test(location.href);
-    window.netlifyIdentity.on('init', function(user){
-      if (hasToken || !user) {
-        window.netlifyIdentity.open(); // abre o popup
+
+    window.netlifyIdentity.on('init', function () {
+      if (hasToken) {
+        window.netlifyIdentity.open(); // abre o modal só nesses casos
       }
     });
-    ['login','signup','passwordRecovery'].forEach(evt=>{
-      window.netlifyIdentity.on(evt, function(){
+
+    // Depois de concluir (login/signup/reset), manda pro painel
+    ['login','signup','passwordRecovery'].forEach(function (evt) {
+      window.netlifyIdentity.on(evt, function () {
         location.href = '/admin/';
       });
     });
