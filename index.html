@@ -31,5 +31,23 @@
   <!-- Default content for offline preview. When the site is deployed the CMS JSON will override these values. -->
   <script src="assets/js/data.js"></script>
   <script src="assets/js/app.js"></script>
+  <!-- Netlify Identity Script -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    const hasToken = /token=|confirmation_token=|recovery_token=|invite_token=/.test(location.href);
+    window.netlifyIdentity.on('init', function(user){
+      if (hasToken || !user) {
+        window.netlifyIdentity.open(); // abre o popup
+      }
+    });
+    ['login','signup','passwordRecovery'].forEach(evt=>{
+      window.netlifyIdentity.on(evt, function(){
+        location.href = '/admin/';
+      });
+    });
+  }
+</script>
+  
 </body>
 </html>
